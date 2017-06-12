@@ -1,0 +1,2 @@
+class InputDatum < ApplicationRecord
+end

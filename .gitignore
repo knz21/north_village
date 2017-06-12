@@ -42,3 +42,8 @@ bower.json
 
 # Ignore Byebug command history file.
 .byebug_history
+
+.DS_Store
+
+# Ignore unnecessary client files
+/app/assets/javascripts/webpack
