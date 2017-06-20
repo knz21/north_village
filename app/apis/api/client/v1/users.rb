@@ -3,12 +3,9 @@ module API::Client
     class Users < Grape::API
       resource :users do
         params do
-          # requires :param, type: String, allow_blank: false
         end
 
         get do
-
-
           {
               status: 1,
               result: {
@@ -16,7 +13,15 @@ module API::Client
                       {
                           id: 1,
                           name: 'user1'
-                      }
+                      },
+                      {
+                          id: 2,
+                          name: 'user2'
+                      },
+                      {
+                          id: 3,
+                          name: 'user3'
+                      },
                   ]
               }
           }
