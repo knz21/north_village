@@ -30,25 +30,37 @@ class App extends Component {
         this.setState({
             drawerOpen: !this.state.drawerOpen
         });
-    }
+    };
+
+    selectUser = (idx) => {
+        this.setState({
+            drawerOpen: !this.state.drawerOpen,
+            selectedUser: idx
+        })
+    };
 
     render() {
         const users = this.state.users.map((user, idx) => {
-            return <User key={idx} onSelect={this.handleToggleDrawer} user={user}/>
+            return <User key={idx} onSelect={this.selectUser.bind(this, idx)} user={user}/>
         });
-
-        const currentUserName = this.state.users.length > 0 ? this.state.users[0].name : 'not selected'
 
         return (
             <MuiThemeProvider muiTheme={getMuiTheme()}>
                 <div>
-                    <Header name={currentUserName} toggleDrawer={this.handleToggleDrawer}/>
+                    <Header name={this.selectedUserName()} toggleDrawer={this.handleToggleDrawer}/>
                     <Users open={this.state.drawerOpen} toggle={this.handleToggleDrawer}>
                         {users}
                     </Users>
                 </div>
             </MuiThemeProvider>
         )
+    }
+
+    selectedUserName = () => {
+        if (this.state.users.length > 0 && this.state.users.length > this.state.selectedUser) {
+            return this.state.users[this.state.selectedUser].name
+        }
+        return ''
     }
 }
 
