@@ -4,8 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "webpack-watch": "webpack --watch --progress",
-    "webpack-build": "webpack -p"
+    "dev": "webpack --watch --progress",
+    "build": "webpack -p"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
