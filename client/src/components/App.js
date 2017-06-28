@@ -19,8 +19,11 @@ class App extends Component {
             selectedUser: 0
         };
 
-
-        axios.get(`api/client/v1/users`)
+        axios.get(`api/client/v1/users`, {
+            params: {
+                token: document.getElementById('token').value
+            }
+        })
             .then(res => {
                 this.setState({users: res.data.result.users})
             });

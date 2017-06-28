@@ -3,9 +3,12 @@ module API::Client
     class Users < Grape::API
       resource :users do
         params do
+          requires :token, type: String, allow_blank: false
         end
 
         get do
+          dec = JWT.decode(params[:token], ENV['JWT_TOKEN_SECRET'], 'HS256')
+          puts dec[0]['id']
           {
               status: 1,
               result: {
