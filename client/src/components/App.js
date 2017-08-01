@@ -1,70 +1,78 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
+import {toggleDrawer, selectUser} from '../actions'
+import {fetchUsers} from '../actions/users'
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import Header from './Header'
 import Users from './Users'
 import User from './User'
-import axios from 'axios'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import LinearProgress from 'material-ui/LinearProgress';
 injectTapEventPlugin();
 
 class App extends Component {
-    constructor(props, context) {
-        super(props, context);
 
-        this.state = {
-            open: false,
-            drawerOpen: false,
-            users: [],
-            selectedUser: 0
-        };
-
-        axios.get(`api/client/v1/users`, {
-            params: {
-                token: document.getElementById('token').value
-            }
-        })
-            .then(res => {
-                this.setState({users: res.data.result.users})
-            });
+    componentDidMount() {
+        this.props.fetchUsers()
     }
 
-    handleToggleDrawer = () => {
-        this.setState({
-            drawerOpen: !this.state.drawerOpen
-        });
-    };
-
-    selectUser = (idx) => {
-        this.setState({
-            drawerOpen: !this.state.drawerOpen,
-            selectedUser: idx
-        })
-    };
-
     render() {
-        const users = this.state.users.map((user, idx) => {
-            return <User key={idx} onSelect={this.selectUser.bind(this, idx)} user={user}/>
+        console.log('props');
+        console.log(this.props);
+        const users = this.props.users.map((user, idx) => {
+            return <User key={idx} onSelect={this.props.selectUser.bind(this, idx)} user={user}/>
         });
 
         return (
             <MuiThemeProvider muiTheme={getMuiTheme()}>
                 <div>
-                    <Header name={this.selectedUserName()} toggleDrawer={this.handleToggleDrawer}/>
-                    <Users open={this.state.drawerOpen} toggle={this.handleToggleDrawer}>
+                    <Header name={this.selectedUserName()} toggleDrawer={this.props.toggleDrawer}/>
+                    <Users open={this.props.drawerOpen} toggle={this.props.toggleDrawer}>
                         {users}
                     </Users>
+                    {(this.props.isLoading) ? <LinearProgress/> : null}
                 </div>
             </MuiThemeProvider>
         )
     }
 
     selectedUserName = () => {
-        if (this.state.users.length > 0 && this.state.users.length > this.state.selectedUser) {
-            return this.state.users[this.state.selectedUser].name
+        if (this.props.users.length > 0 && this.props.users.length > this.props.selectedUser) {
+            return this.props.users[this.props.selectedUser].name
         }
         return ''
     }
 }
 
-export default App
+App.propTypes = {
+    users: PropTypes.array.isRequired,
+    selectedUser: PropTypes.number.isRequired,
+    drawerOpen: PropTypes.bool.isRequired,
+    fetchUsers: PropTypes.func.isRequired,
+    hasError: PropTypes.bool.isRequired,
+    isLoading: PropTypes.bool.isRequired
+};
+
+const mapStateToProps = state => ({
+    users: state.users,
+    selectedUser: state.header.selectedUser,
+    drawerOpen: state.header.drawerOpen,
+    hasError: state.getUsersError,
+    isLoading: state.loadUsers
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    toggleDrawer: () => dispatch(toggleDrawer()),
+    selectUser: (idx) => {
+        dispatch(selectUser(idx));
+        dispatch(toggleDrawer())
+    },
+    fetchUsers: (url) => dispatch(fetchUsers(url))
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App)
