@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  part_id: 1
+  rep: 1
+  work_out_date: 2017-08-09
+
+two:
+  user_id: 1
+  part_id: 1
+  rep: 1
+  work_out_date: 2017-08-09
