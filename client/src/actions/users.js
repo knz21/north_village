@@ -20,7 +20,7 @@ export const fetchUsers = () => {
         dispatch(loadUsers(true));
         axios.get(`api/client/v1/users`, {
             params: {
-                token: document.getElementById('token').value
+                token: localStorage.getItem('token')
             }
         })
             .then((response) => {

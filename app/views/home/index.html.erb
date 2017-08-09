@@ -1,3 +1,5 @@
 <div id="root"></div>
-<input id="token" type="hidden" value="<%=@token%>"/>
+<script>
+    localStorage.setItem('token', '<%= @token %>');
+</script>
 <%= javascript_include_tag 'webpack/app' %>
