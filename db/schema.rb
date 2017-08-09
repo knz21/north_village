@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531001541) do
+ActiveRecord::Schema.define(version: 20170808234517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "friends", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "friend_user_id"
+    t.string   "code"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
 
   create_table "input_data", force: :cascade do |t|
     t.integer  "user_id"
@@ -21,6 +29,22 @@ ActiveRecord::Schema.define(version: 20170531001541) do
     t.integer  "count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "parts", force: :cascade do |t|
+    t.string   "name"
+    t.string   "suffix"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "repetitions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "part_id"
+    t.integer  "rep"
+    t.date     "work_out_date"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "user_relations", force: :cascade do |t|
